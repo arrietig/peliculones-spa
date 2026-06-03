@@ -3,6 +3,21 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api";
 
+function FilmIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
+      <rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18" />
+      <line x1="7" x2="7" y1="2" y2="22" />
+      <line x1="17" x2="17" y1="2" y2="22" />
+      <line x1="2" x2="22" y1="12" y2="12" />
+      <line x1="2" x2="7" y1="7" y2="7" />
+      <line x1="2" x2="7" y1="17" y2="17" />
+      <line x1="17" x2="22" y1="17" y2="17" />
+      <line x1="17" x2="22" y1="7" y2="7" />
+    </svg>
+  );
+}
+
 export function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -39,26 +54,26 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center">
+    <div className="flex min-h-[80vh] items-center justify-center">
       <div className="w-full max-w-sm">
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h1 className="mb-1 text-2xl font-bold text-slate-900">Iniciar sesión</h1>
-          <p className="mb-6 text-sm text-slate-500">
-            Accede para comentar y valorar películas
-          </p>
+        <div className="glass rounded-3xl p-8 shadow-glow">
+          <div className="mb-6 flex flex-col items-center gap-2">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/20 border border-brand/30 text-brand">
+              <FilmIcon />
+            </div>
+            <h1 className="font-display text-2xl font-bold text-white">Movies SPA</h1>
+            <p className="text-sm text-slate-400">Accede para comentar y valorar</p>
+          </div>
 
           {error && (
-            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="mb-4 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-400">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label
-                htmlFor="username"
-                className="mb-1.5 block text-sm font-medium text-slate-700"
-              >
+              <label htmlFor="username" className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-400">
                 Usuario
               </label>
               <input
@@ -69,15 +84,12 @@ export function LoginPage() {
                 required
                 autoComplete="username"
                 placeholder="emilys"
-                className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20"
+                className="input-glass w-full rounded-xl px-3 py-2.5 text-sm"
               />
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="mb-1.5 block text-sm font-medium text-slate-700"
-              >
+              <label htmlFor="password" className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-400">
                 Contraseña
               </label>
               <input
@@ -88,35 +100,37 @@ export function LoginPage() {
                 required
                 autoComplete="current-password"
                 placeholder="••••••••"
-                className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20"
+                className="input-glass w-full rounded-xl px-3 py-2.5 text-sm"
               />
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-lg bg-brand py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
+              className="btn-primary w-full rounded-xl py-2.5 text-sm cursor-pointer"
             >
               {isSubmitting ? "Ingresando..." : "Ingresar"}
             </button>
           </form>
 
-          <div className="mt-6 rounded-lg bg-slate-50 p-4">
-            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">
+          <div className="mt-6 rounded-xl border border-white/5 bg-white/3 p-4">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-600">
               Credenciales de prueba
             </p>
-            <div className="mb-3 space-y-1 font-mono text-xs text-slate-600">
+            <div className="mb-3 space-y-1 font-mono text-xs text-slate-400">
               <p>
-                <span className="text-slate-400">usuario:</span> emilys
+                <span className="text-slate-600">usuario:</span>{" "}
+                <span className="text-brand-light">emilys</span>
               </p>
               <p>
-                <span className="text-slate-400">contraseña:</span> emilyspass
+                <span className="text-slate-600">contraseña:</span>{" "}
+                <span className="text-brand-light">emilyspass</span>
               </p>
             </div>
             <button
               type="button"
               onClick={fillDemo}
-              className="w-full rounded-md border border-slate-200 bg-white py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
+              className="btn-ghost cursor-pointer w-full py-1.5 text-xs font-medium rounded-lg"
             >
               Completar automáticamente
             </button>

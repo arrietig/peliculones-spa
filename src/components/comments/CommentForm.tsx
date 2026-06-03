@@ -24,13 +24,13 @@ export function CommentForm({ onSubmit, isSubmitting }: CommentFormProps) {
         rows={3}
         placeholder="Escribe tu comentario..."
         required
-        className="mb-2 w-full resize-none rounded-xl border border-slate-300 p-3 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20"
+        className="input-glass mb-2 w-full resize-none rounded-2xl p-4 text-sm"
       />
       <div className="flex justify-end">
         <button
           type="submit"
           disabled={isSubmitting || body.trim().length === 0}
-          className="rounded-lg bg-brand px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
+          className="btn-primary cursor-pointer rounded-xl px-6 py-2 text-sm"
         >
           {isSubmitting ? "Publicando..." : "Publicar comentario"}
         </button>

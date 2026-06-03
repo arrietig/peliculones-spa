@@ -11,7 +11,7 @@ export function StarRating({
   readonly = false,
   size = "md",
 }: StarRatingProps) {
-  const starSize = size === "sm" ? "text-base" : "text-xl";
+  const starSize = size === "sm" ? "text-base" : "text-2xl";
 
   return (
     <div className="flex items-center gap-0.5" aria-label={`${value} de 5 estrellas`}>
@@ -23,9 +23,9 @@ export function StarRating({
           onClick={() => onChange?.(star)}
           className={[
             starSize,
-            "transition-transform",
-            readonly ? "cursor-default" : "cursor-pointer hover:scale-110",
-            star <= value ? "text-amber-400" : "text-slate-300",
+            "transition-all duration-150",
+            readonly ? "cursor-default" : "cursor-pointer hover:scale-110 hover:drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]",
+            star <= value ? "text-amber-400" : "text-white/10",
           ].join(" ")}
         >
           ★

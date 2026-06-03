@@ -6,33 +6,30 @@ interface PaginationProps {
 
 export function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
   if (totalPages <= 1) return null;
-
   const pages = buildPageRange(page, totalPages);
 
   return (
-    <nav className="flex items-center justify-center gap-1" aria-label="Paginación">
+    <nav className="flex items-center justify-center gap-1.5" aria-label="Paginación">
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
-        className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
+        className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-slate-400 transition-all duration-200 hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
       >
         ← Anterior
       </button>
 
       {pages.map((p, i) =>
         p === "…" ? (
-          <span key={`ellipsis-${i}`} className="px-1 text-slate-400">
-            …
-          </span>
+          <span key={`ellipsis-${i}`} className="px-1 text-slate-600">…</span>
         ) : (
           <button
             key={p}
             onClick={() => onPageChange(Number(p))}
             className={[
-              "min-w-[36px] rounded-lg border px-3 py-1.5 text-sm transition",
+              "min-w-[36px] rounded-xl border px-3 py-1.5 text-sm transition-all duration-200 cursor-pointer",
               Number(p) === page
-                ? "border-brand bg-brand text-white"
-                : "border-slate-200 text-slate-600 hover:bg-slate-50",
+                ? "border-brand bg-brand text-white shadow-glow-sm"
+                : "border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white",
             ].join(" ")}
           >
             {p}
@@ -43,7 +40,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages}
-        className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
+        className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-slate-400 transition-all duration-200 hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
       >
         Siguiente →
       </button>
