@@ -45,7 +45,7 @@ export function Navbar() {
           <span className="text-brand">
             <FilmIcon />
           </span>
-          Movies SPA
+          PELICULONES
         </Link>
 
         <nav className="flex items-center gap-3">

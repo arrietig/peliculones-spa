@@ -11,7 +11,7 @@ PROMPTS INGRESADOS
 
 [SESIÓN PRINCIPAL]
 
-1. "Bien, en la carpeta PRUEBA FRONTEND SPA hay un archivo pdf en donde hay una prueba para que yo pueda pasar al área e IT. Quiero que hagamos paso a paso esta prueba y me expliques que cambios haces y como se hace para que pueda yo defenderme a la hora de que me pregunten. También, quiero código limpio, sin comentarios para que parezca IA la que produjo todo el código."
+1. "Bien, en la carpeta PRUEBA FRONTEND SPA hay un archivo pdf. Quiero que hagamos paso a paso esta prueba y me expliques algunos conceptos del proyecto, hagamos un code limpio."
 
 [ELECCIONES TOMADAS POR EL DESARROLLADOR]
 - Framework: Vite + React + TypeScript

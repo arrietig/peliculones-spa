@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import type { Comment } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { useCommentsCrud } from "@/hooks/useCommentsCrud";
 import { CommentItem } from "./CommentItem";
@@ -7,14 +6,12 @@ import { CommentForm } from "./CommentForm";
 
 interface CommentSectionProps {
   postId: number;
-  serverComments: Comment[];
-  isLoading: boolean;
 }
 
-export function CommentSection({ postId, serverComments, isLoading }: CommentSectionProps) {
+export function CommentSection({ postId }: CommentSectionProps) {
   const { isAuthenticated } = useAuth();
   const { comments, addComment, editComment, deleteComment, isAdding } =
-    useCommentsCrud({ postId, serverComments });
+    useCommentsCrud(postId);
 
   return (
     <section>
@@ -29,24 +26,19 @@ export function CommentSection({ postId, serverComments, isLoading }: CommentSec
         <CommentForm onSubmit={addComment} isSubmitting={isAdding} />
       ) : (
         <div className="mb-6 rounded-2xl border border-dashed border-white/10 p-5 text-center text-sm text-slate-500">
-          <Link to="/login" className="font-medium text-brand hover:text-brand-light transition-colors">
-            Inicia sesión
+          <Link
+            to="/login"
+            className="font-medium text-brand hover:text-brand-light transition-colors"
+          >
+            Iniciá sesión
           </Link>{" "}
-          para dejar un comentario.
+          para dejar un comentario. ¡Sé el primero!
         </div>
       )}
 
-      {isLoading && serverComments.length === 0 && (
-        <div className="space-y-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-24 animate-pulse rounded-2xl border border-white/5 bg-white/3" />
-          ))}
-        </div>
-      )}
-
-      {!isLoading && comments.length === 0 && (
+      {comments.length === 0 && (
         <p className="py-8 text-center text-sm text-slate-500">
-          Sin comentarios aún. ¡Sé el primero!
+          Aún no hay comentarios. ¡Animate a ser el primero!
         </p>
       )}
 

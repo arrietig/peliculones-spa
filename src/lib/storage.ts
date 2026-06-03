@@ -33,6 +33,11 @@ export const localCommentsStorage = {
     const map = read<LocalCommentsMap>(COMMENTS_KEY, {});
     return map[String(postId)] ?? [];
   },
+  saveAll: (postId: number, comments: Comment[]) => {
+    const map = read<LocalCommentsMap>(COMMENTS_KEY, {});
+    map[String(postId)] = comments;
+    write(COMMENTS_KEY, map);
+  },
   add: (postId: number, comment: Comment) => {
     const map = read<LocalCommentsMap>(COMMENTS_KEY, {});
     const list = map[String(postId)] ?? [];

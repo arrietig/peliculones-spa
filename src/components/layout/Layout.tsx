@@ -20,7 +20,7 @@ export function Layout() {
       </main>
 
       <footer className="relative z-10 border-t border-white/5 py-4 text-center text-xs text-slate-600">
-        Movies SPA — dummyjson.com
+        PELICULONES — 2024
       </footer>
     </div>
   );

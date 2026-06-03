@@ -1,39 +1,19 @@
-import { useMemo, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  localCommentsStorage,
-  deletedCommentsStorage,
-  editedCommentsStorage,
-} from "@/lib/storage";
+import { localCommentsStorage } from "@/lib/storage";
 import type { Comment } from "@/types";
 
-interface UseCommentsCrudOptions {
-  postId: number;
-  serverComments: Comment[];
-}
-
-export function useCommentsCrud({ postId, serverComments }: UseCommentsCrudOptions) {
+export function useCommentsCrud(postId: number) {
   const { user } = useAuth();
-  const [localComments, setLocalComments] = useState<Comment[]>(() =>
+  const [comments, setComments] = useState<Comment[]>(() =>
     localCommentsStorage.getAll(postId)
-  );
-  const [deletedIds, setDeletedIds] = useState<Set<number>>(
-    () => new Set(deletedCommentsStorage.getAll(postId))
-  );
-  const [editedBodies, setEditedBodies] = useState<Record<number, string>>(
-    () => editedCommentsStorage.getAll(postId)
   );
   const [isAdding, setIsAdding] = useState(false);
 
-  const comments = useMemo<Comment[]>(() => {
-    const withEdits = serverComments
-      .filter((c) => !deletedIds.has(c.id))
-      .map((c) =>
-        editedBodies[c.id] !== undefined ? { ...c, body: editedBodies[c.id] } : c
-      );
-    return [...localComments.filter((c) => !deletedIds.has(c.id)), ...withEdits];
-  }, [serverComments, localComments, deletedIds, editedBodies]);
+  function persist(next: Comment[]) {
+    localCommentsStorage.saveAll(postId, next);
+  }
 
   const addComment = useCallback(
     async (body: string) => {
@@ -45,23 +25,30 @@ export function useCommentsCrud({ postId, serverComments }: UseCommentsCrudOptio
         body,
         postId,
         likes: 0,
-        user: { id: user.id, username: user.username, fullName: `${user.firstName} ${user.lastName}` },
+        user: {
+          id: user.id,
+          username: user.username,
+          fullName: `${user.firstName} ${user.lastName}`,
+        },
       };
-      setLocalComments((prev) => [optimistic, ...prev]);
-      localCommentsStorage.add(postId, optimistic);
+      setComments((prev) => {
+        const next = [optimistic, ...prev];
+        persist(next);
+        return next;
+      });
       try {
         const created = await api.post<Comment>(
           "/comments/add",
           { body, postId, userId: user.id },
           { auth: true }
         );
-        setLocalComments((prev) =>
-          prev.map((c) => (c.id === tempId ? created : c))
-        );
-        localCommentsStorage.remove(postId, tempId);
-        localCommentsStorage.add(postId, created);
+        setComments((prev) => {
+          const next = prev.map((c) => (c.id === tempId ? created : c));
+          persist(next);
+          return next;
+        });
       } catch {
-        /* keep optimistic comment on failure */
+        /* keep optimistic comment */
       } finally {
         setIsAdding(false);
       }
@@ -72,20 +59,17 @@ export function useCommentsCrud({ postId, serverComments }: UseCommentsCrudOptio
   const editComment = useCallback(
     async (id: number, body: string) => {
       if (!user) return;
-      setEditedBodies((prev) => ({ ...prev, [id]: body }));
-      editedCommentsStorage.set(postId, id, body);
-      const isLocal = id < 0;
-      if (isLocal) {
-        localCommentsStorage.update(postId, id, body);
-        setLocalComments((prev) =>
-          prev.map((c) => (c.id === id ? { ...c, body } : c))
-        );
-        return;
-      }
-      try {
-        await api.put(`/comments/${id}`, { body }, { auth: true });
-      } catch {
-        /* local state already updated */
+      setComments((prev) => {
+        const next = prev.map((c) => (c.id === id ? { ...c, body } : c));
+        persist(next);
+        return next;
+      });
+      if (id > 0) {
+        try {
+          await api.put(`/comments/${id}`, { body }, { auth: true });
+        } catch {
+          /* local state already updated */
+        }
       }
     },
     [user, postId]
@@ -94,18 +78,17 @@ export function useCommentsCrud({ postId, serverComments }: UseCommentsCrudOptio
   const deleteComment = useCallback(
     async (id: number) => {
       if (!user) return;
-      setDeletedIds((prev) => new Set([...prev, id]));
-      deletedCommentsStorage.add(postId, id);
-      const isLocal = id < 0;
-      if (isLocal) {
-        localCommentsStorage.remove(postId, id);
-        setLocalComments((prev) => prev.filter((c) => c.id !== id));
-        return;
-      }
-      try {
-        await api.del(`/comments/${id}`, { auth: true });
-      } catch {
-        /* local state already updated */
+      setComments((prev) => {
+        const next = prev.filter((c) => c.id !== id);
+        persist(next);
+        return next;
+      });
+      if (id > 0) {
+        try {
+          await api.del(`/comments/${id}`, { auth: true });
+        } catch {
+          /* local state already updated */
+        }
       }
     },
     [user, postId]
