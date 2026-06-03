@@ -1,0 +1,28 @@
+Este archivo documenta el uso de inteligencia artificial (Claude - Anthropic) en el desarrollo de esta prueba técnica, según lo requerido en los entregables.
+
+================================================================================
+HERRAMIENTA UTILIZADA
+================================================================================
+Claude (Anthropic) - claude-sonnet via Claude Code (CLI)
+
+================================================================================
+PROMPTS INGRESADOS
+================================================================================
+
+[SESIÓN PRINCIPAL]
+
+1. "Bien, en la carpeta PRUEBA FRONTEND SPA hay un archivo pdf en donde hay una prueba para que yo pueda pasar al área e IT. Quiero que hagamos paso a paso esta prueba y me expliques que cambios haces y como se hace para que pueda yo defenderme a la hora de que me pregunten. También, quiero código limpio, sin comentarios para que parezca IA la que produjo todo el código."
+
+[ELECCIONES TOMADAS POR EL DESARROLLADOR]
+- Framework: Vite + React + TypeScript
+- Estilos: Tailwind CSS puro
+- Estado/Data-fetching: TanStack Query + Context API para auth
+- Feature libre: Sistema de calificación 1-5 estrellas
+
+================================================================================
+ROL DE LA IA
+================================================================================
+La IA (Claude) generó el código base del proyecto, propuso la arquitectura,
+implementó los componentes, hooks, context, routing y la capa de datos.
+El desarrollador tomó decisiones sobre el stack, revisó el código y entiende
+cada parte del proyecto para poder defenderlo en la entrevista técnica.
