@@ -1,21 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
-function FilmIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-      <rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18" />
-      <line x1="7" x2="7" y1="2" y2="22" />
-      <line x1="17" x2="17" y1="2" y2="22" />
-      <line x1="2" x2="22" y1="12" y2="12" />
-      <line x1="2" x2="7" y1="7" y2="7" />
-      <line x1="2" x2="7" y1="17" y2="17" />
-      <line x1="17" x2="22" y1="17" y2="17" />
-      <line x1="17" x2="22" y1="7" y2="7" />
-    </svg>
-  );
-}
-
 function LogOutIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
@@ -40,12 +25,14 @@ export function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link
           to="/"
-          className="flex items-center gap-2 text-xl font-display font-bold text-white hover:text-brand transition-colors duration-200"
+          className="flex items-center transition-opacity duration-200 hover:opacity-80"
+          aria-label="PELICULONES - Inicio"
         >
-          <span className="text-brand">
-            <FilmIcon />
-          </span>
-          PELICULONES
+          <img
+            src="/logo.png"
+            alt="PELICULONES"
+            className="h-14 w-auto sm:h-16"
+          />
         </Link>
 
         <nav className="flex items-center gap-3">

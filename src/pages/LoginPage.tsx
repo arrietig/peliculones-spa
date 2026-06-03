@@ -3,21 +3,6 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api";
 
-function FilmIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18" />
-      <line x1="7" x2="7" y1="2" y2="22" />
-      <line x1="17" x2="17" y1="2" y2="22" />
-      <line x1="2" x2="22" y1="12" y2="12" />
-      <line x1="2" x2="7" y1="7" y2="7" />
-      <line x1="2" x2="7" y1="17" y2="17" />
-      <line x1="17" x2="22" y1="17" y2="17" />
-      <line x1="17" x2="22" y1="7" y2="7" />
-    </svg>
-  );
-}
-
 export function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -58,11 +43,8 @@ export function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="glass rounded-3xl p-8 shadow-glow">
           <div className="mb-6 flex flex-col items-center gap-2">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/20 border border-brand/30 text-brand">
-              <FilmIcon />
-            </div>
-            <h1 className="font-display text-2xl font-bold text-white">PELICULONES</h1>
-            <p className="text-sm text-slate-400">Accede para comentar y valorar</p>
+            <img src="/logo.png" alt="PELICULONES" className="h-24 w-auto sm:h-28" />
+            <p className="text-sm text-slate-400">Accedé para comentar y valorar</p>
           </div>
 
           {error && (
