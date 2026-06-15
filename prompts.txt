@@ -25,4 +25,4 @@ ROL DE LA IA
 La IA (Claude) generó el código base del proyecto, propuso la arquitectura,
 implementó los componentes, hooks, context, routing y la capa de datos.
 El desarrollador tomó decisiones sobre el stack, revisó el código y entiende
-cada parte del proyecto para poder defenderlo en la entrevista técnica.
+cada parte del proyecto.
