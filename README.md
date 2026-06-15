@@ -1,72 +1,69 @@
-# Movies SPA
+# PELICULONES
 
-SPA desarrollada con **React 18 + TypeScript + Vite** que consume la API pública de [dummyjson.com](https://dummyjson.com) para listar "películas" (posts), ver su detalle, gestionar comentarios con autenticación, y calificar con estrellas.
+SPA desarrollada con **React 18 + TypeScript + Vite** para listar películas, ver su detalle, gestionar comentarios con autenticación JWT y calificar con estrellas. Consume [dummyjson.com](https://dummyjson.com) para auth y CRUD de comentarios.
 
 ## Instrucciones para correr
 
 ```bash
 npm install
-npm run dev      # Inicia el servidor de desarrollo en http://localhost:5173
-npm run build    # Compila para producción (tsc + vite build)
+npm run dev      # Servidor de desarrollo en http://localhost:5173
+npm run build    # Compilación de producción (tsc + vite build)
 npm run preview  # Sirve el build de producción en http://localhost:4173
 ```
 
 ## Credenciales de prueba
 
-| Campo     | Valor        |
-|-----------|--------------|
-| Usuario   | `emilys`     |
-| Contraseña| `emilyspass` |
+| Campo      | Valor        |
+|------------|--------------|
+| Usuario    | `emilys`     |
+| Contraseña | `emilyspass` |
 
-La pantalla de login incluye un botón "Completar automáticamente" para agilizar la demo.
+La pantalla de login incluye un botón **"Completar automáticamente"** para agilizar la demo.
 
 ---
 
 ## Decisiones técnicas
 
 ### Framework y bundler
-- **Vite + React 18 + TypeScript**: Vite ofrece un dev server extremadamente rápido (esbuild para transformaciones, Rollup para build). `create-react-app` está deprecado. TypeScript agrega tipado estático que reduce bugs en runtime y actúa como documentación viva de los contratos con la API.
+- **Vite + React 18 + TypeScript**: Vite usa ESM nativos en dev (sin bundling previo), lo que hace el HMR prácticamente instantáneo. `create-react-app` está en modo mantenimiento desde 2023. TypeScript en modo estricto actúa como documentación viva de los contratos internos.
 
 ### Estilos
-- **Tailwind CSS v3**: utility-first. El build de producción purgará todas las clases no utilizadas, resultando en un CSS mínimo. Se evitó una librería de componentes para mantener control total del diseño.
+- **Tailwind CSS v3** utility-first con tema personalizado: paleta `brand` púrpura, sombras `glow`, fuentes `Righteous` (display) y `Poppins` (body). Se evitó una librería de componentes para control total del diseño. Glassmorphism implementado como utilidades custom en `@layer utilities`.
 
 ### Routing
-- **react-router-dom v6** con `createBrowserRouter`: API moderna que soporta data loaders. Las rutas de detalle y listado usan `useSearchParams` para mantener el estado de paginación en la URL (el usuario puede copiar/pegar el link y conservar la página actual).
+- **react-router-dom v6** con `createBrowserRouter`. El estado de paginación, búsqueda y filtro de género vive en la URL (`?page=1&limit=10&genre=terror&q=`) — el usuario puede compartir o guardar una búsqueda específica.
 
 ### Manejo de estado
-- **TanStack Query v5** para *server state*: maneja cache, estados de carga/error, refetch y `placeholderData` (datos previos mientras carga la siguiente página) de forma declarativa.
-- **Context API** para *client state* (auth): el estado de autenticación es simple (un usuario + token). Redux o Zustand serían sobreingeniería para este caso.
+- **TanStack Query v5** para *server state*: caché, estados de carga/error, `placeholderData` (mantiene datos anteriores mientras carga la página siguiente) y deduplicación de requests.
+- **Context API** para *client state* (auth): el estado de autenticación es simple (usuario + token). Redux o Zustand serían sobreingeniería para este caso.
 
 ### Autenticación
-- El token se guarda en `localStorage` y se restaura al iniciar la app validándolo contra `/auth/me`. Si el token expiró, se hace logout limpio. Mientras se valida, se muestra un spinner para evitar un flash de redirect.
-- La inyección del token en cada request autenticado ocurre en el wrapper `api.ts`, garantizando un único punto de control.
+- Token JWT guardado en `localStorage`, restaurado al montar la app validándolo contra `GET /auth/me`. Si venció, logout limpio. El flag `isLoading: true` durante la restauración evita el flash de redirect a login.
+- Inyección del token centralizada en `api.ts` (`auth: true`), único punto de control para todos los requests autenticados.
 
 ### HTTP Client
-- `fetch` nativo (sin axios): suficiente para este caso y evita una dependencia extra. El wrapper `api.ts` centraliza: errores tipados (`ApiError`), token automático, base URL.
+- `fetch` nativo sin axios. El wrapper `api.ts` centraliza: errores tipados con clase `ApiError` (incluye `status`), token automático, base URL configurable.
 
 ### CRUD de comentarios y estado local
-- El backend de dummyjson **no persiste** los cambios. La estrategia implementada:
-  1. Se obtienen los comentarios del servidor.
-  2. Se aplica encima un "patch local" desde `localStorage`: comentarios creados (IDs negativos para evitar colisiones), ediciones y eliminaciones.
-  3. Al crear un comentario se hace **optimistic UI**: se inserta inmediatamente en la UI antes de que el servidor responda, mejorando la percepción de velocidad.
-- Los comentarios locales se persisten en `localStorage` por `postId`, sobreviviendo recargas.
+El backend de dummyjson **no persiste** los cambios. Estrategia implementada en `useCommentsCrud`:
+1. Comentarios parten en **0** por diseño — el primer comentarista es quien use la app.
+2. Al crear: **optimistic UI** con `tempId` negativo (`-Date.now()`) para evitar colisiones con IDs reales. Se inserta en UI antes de que el servidor responda; en caso de error se revierte.
+3. Al editar/borrar: reflejo inmediato en estado local.
+4. Todos los cambios se persisten en `localStorage` por `postId` (sobreviven recargas).
+5. Las mutaciones (POST/PUT/DELETE) llaman al API de dummyjson, cumpliendo el requisito de uso real del backend.
 
 ---
 
-## Feature libre: Calificación de películas (1-5 estrellas)
+## Feature libre: Calificación de películas (1–5 estrellas)
 
 ### Motivación
-El objetivo de la app es que el usuario pueda opinar sobre "películas". Las reactions del API (likes/dislikes) son métricas de la comunidad, pero no personales. El sistema de estrellas permite al usuario expresar **su propia valoración** de forma intuitiva.
+Las métricas del API (likes/dislikes) son colectivas y no modificables por el usuario. El sistema de estrellas permite expresar una **valoración personal** de forma intuitiva, diferenciando la experiencia individual de la métrica agregada.
 
 ### Implementación
-- Componente `StarRating` reutilizable (acepta `readonly` y `onChange`).
-- Hook `useRating(postId)` que lee/escribe en `localStorage` con `ratingsStorage`.
-- Visible en la tarjeta del listado (solo lectura si no autenticado, interactivo si está logueado) y en la página de detalle.
-- Persiste entre sesiones gracias a `localStorage`.
-
-### Utilidad
-- Diferencia la experiencia: el usuario ve su calificación personal junto a las métricas colectivas.
-- Es un feature natural para una app de "películas" y demuestra manejo de estado persistido del lado del cliente.
+- Componente `StarRating` reutilizable: acepta `value`, `onChange` (opcional, para modo readonly) y `size`.
+- Hook `useRating(postId)`: lee/escribe en `localStorage` via `ratingsStorage`.
+- Visible en cada card del listado (readonly si no está autenticado, interactivo si lo está) y en la página de detalle.
+- Persiste entre sesiones sin necesidad de backend.
 
 ---
 
@@ -77,12 +74,12 @@ src/
 ├── components/
 │   ├── comments/   # CommentSection, CommentItem, CommentForm
 │   ├── layout/     # Layout, Navbar
-│   ├── posts/      # PostCard, ReactionBar
+│   ├── posts/      # PostCard
 │   └── ui/         # StarRating, Pagination
-├── context/        # AuthContext
-├── hooks/          # useAuth, usePosts, usePost, useCommentsCrud, useDebounce, useRating
+├── context/        # AuthContext (login, logout, restauración de sesión)
+├── data/           # movies.ts (33 películas con posters TMDB y trailers YouTube)
+├── hooks/          # useAuth, useMovies, useCommentsCrud, useDebounce, useRating
 ├── lib/            # api.ts, queryClient.ts, storage.ts
 ├── pages/          # PostsPage, PostDetailPage, LoginPage
-├── router/         # ProtectedRoute
-└── types/          # index.ts (interfaces de la API)
+└── router/         # ProtectedRoute
 ```
