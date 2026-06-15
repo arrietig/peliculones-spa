@@ -15,10 +15,8 @@ npm run preview  # Sirve el build de producción en http://localhost:4173
 
 | Campo      | Valor        |
 |------------|--------------|
-| Usuario    | `emilys`     |
-| Contraseña | `emilyspass` |
-
-La pantalla de login incluye un botón **"Completar automáticamente"** para agilizar la demo.
+| Usuario    | `rrxttqx100`          |
+| Contraseña | `Unamorquenuncamorira` |
 
 ---
 

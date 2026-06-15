@@ -59,7 +59,7 @@ export function LoginPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 autoComplete="username"
-                placeholder="emilys"
+                placeholder="usuario"
                 className="input-glass w-full rounded-xl px-3 py-2.5 text-sm"
               />
             </div>
@@ -89,21 +89,6 @@ export function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 rounded-xl border border-white/5 bg-white/3 p-4">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-600">
-              Credenciales de prueba
-            </p>
-            <div className="space-y-1 font-mono text-xs text-slate-400">
-              <p>
-                <span className="text-slate-600">usuario:</span>{" "}
-                <span className="text-brand-light">emilys</span>
-              </p>
-              <p>
-                <span className="text-slate-600">contraseña:</span>{" "}
-                <span className="text-brand-light">emilyspass</span>
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
