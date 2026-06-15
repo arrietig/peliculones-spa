@@ -32,12 +32,6 @@ export function LoginPage() {
     }
   }
 
-  function fillDemo() {
-    setUsername("emilys");
-    setPassword("emilyspass");
-    setError(null);
-  }
-
   return (
     <div className="flex min-h-[80vh] items-center justify-center">
       <div className="w-full max-w-sm">
@@ -99,7 +93,7 @@ export function LoginPage() {
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-600">
               Credenciales de prueba
             </p>
-            <div className="mb-3 space-y-1 font-mono text-xs text-slate-400">
+            <div className="space-y-1 font-mono text-xs text-slate-400">
               <p>
                 <span className="text-slate-600">usuario:</span>{" "}
                 <span className="text-brand-light">emilys</span>
@@ -109,13 +103,6 @@ export function LoginPage() {
                 <span className="text-brand-light">emilyspass</span>
               </p>
             </div>
-            <button
-              type="button"
-              onClick={fillDemo}
-              className="btn-ghost cursor-pointer w-full py-1.5 text-xs font-medium rounded-lg"
-            >
-              Completar automáticamente
-            </button>
           </div>
         </div>
       </div>
