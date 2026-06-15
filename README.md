@@ -15,8 +15,8 @@ npm run preview  # Sirve el build de producción en http://localhost:4173
 
 | Campo      | Valor        |
 |------------|--------------|
-| Usuario    | `rrxttqx100`          |
-| Contraseña | `Unamorquenuncamorira` |
+| Usuario    | `emilys`     |
+| Contraseña | `emilyspass` |
 
 ---
 
